@@ -1,4 +1,4 @@
-query:
+query: '
   query($owner:String!, $name:String!, $pr_num:Int!) {
     repository(name:$name, owner:$owner) {
     name
@@ -30,8 +30,8 @@ query:
       }
       additions
     }
-  }
-  }
+   }
+ }'
 variables:
   owner:
     type: jq
