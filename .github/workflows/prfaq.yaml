@@ -10,6 +10,9 @@ jobs:
   get_pr_stats:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: ./     
     - name: GitHub GraphQL Action
       uses: helaili/github-graphql-action@2.0.1
       env:
