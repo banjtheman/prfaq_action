@@ -1,0 +1,21 @@
+name: PRFAQ
+
+# only trigger on pull request closed events
+on:
+  pull_request:
+    types: [ closed ]
+
+
+jobs:
+  get_pr_stats:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ./
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        query: queries/pr_stats.yaml
+        logLevel: debug
+        outputFile: pr_stats.json
+        

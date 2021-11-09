@@ -1,0 +1,47 @@
+query:
+  query($owner:String!, $name:String!, $pr_num:Int!) {
+    repository(name:$name, owner:$owner) {
+    name
+    description
+    pullRequest(number:$pr_num) {
+      author {
+        login
+      }
+      mergedAt
+      changedFiles
+      createdAt
+      deletions
+      participants(first: 100) {
+        totalCount
+        edges {
+          node {
+            login
+          }
+        }
+      }
+      commits {
+        totalCount
+      }
+      reviews {
+        totalCount
+      }
+      files {
+        totalCount
+      }
+      additions
+    }
+  }
+  }
+variables:
+  owner:
+    type: jq
+    file: ../workflow/event.json
+    query: '.repository.owner.login'
+  name:
+    type: jq
+    file: ../workflow/event.json
+    query: '.repository.name'
+  pr_num:
+    type: jq
+    file: ../workflow/event.json
+    query: '.github.event.number'    
