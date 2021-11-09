@@ -44,4 +44,4 @@ variables:
   pr_num:
     type: jq
     file: ../workflow/event.json
-    query: '.github.event.number'    
+    query: '.github.event.pull_request.number'    
