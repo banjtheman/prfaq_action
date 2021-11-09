@@ -16,7 +16,7 @@ jobs:
       uses: helaili/github-graphql-action@2.0.1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        PR_NUMBER: ${{ github.event.number }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
       with:
         query: queries/pr_stats.yaml
         logLevel: debug
