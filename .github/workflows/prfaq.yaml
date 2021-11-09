@@ -10,8 +10,8 @@ jobs:
   get_pr_stats:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: ./
+    - name: GitHub GraphQL Action
+      uses: helaili/github-graphql-action@2.0.1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
