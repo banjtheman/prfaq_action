@@ -42,6 +42,5 @@ variables:
     file: ../workflow/event.json
     query: '.repository.name'
   pr_num:
-    type: jq
-    file: ../workflow/event.json
-    query: '.github.event.pull_request.number'    
+    type: arg
+    name: PR_NUMBER
