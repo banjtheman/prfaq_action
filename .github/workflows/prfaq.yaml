@@ -31,8 +31,8 @@ jobs:
         vars: |
           foo: this
           bar: that
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          issue-number: ${{ env.PR_NUMBER }}
-          body: ${{ steps.template.outputs.result }}     
+    - name: Create comment
+      uses: peter-evans/create-or-update-comment@v1
+      with:
+        issue-number: ${{ env.PR_NUMBER }}
+        body: ${{ steps.template.outputs.result }}     
