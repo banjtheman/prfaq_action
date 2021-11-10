@@ -23,7 +23,7 @@ jobs:
           outputFile: pr_stats.json
           pr_num: ${{ env.PR_NUMBER }}
       - name: Set env variables
-      - uses: jannekem/run-python-script-action@v1
+        uses: jannekem/run-python-script-action@v1
         with:
           script: |
             import json
