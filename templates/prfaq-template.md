@@ -1,2 +1,15 @@
-This is a test comment template
-Render template variables such as {{ .foo }} and {{ .bar }}.
+## PR FAQ
+
+### How long was PR open?  
+The PR was open for {{ .pr_open }}  
+
+### Who contributed to the PR  
+The following users contributed to the pr  
+{{ .pr_users }}
+
+### What files changed in the PR  
+The following files changed in the pr  
+{{ .pr_files }}
+
+### How many lines of code changed in the PR  
+{{ .pr_loc }} changed  

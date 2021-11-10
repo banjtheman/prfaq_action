@@ -3,40 +3,90 @@ name: PRFAQ
 # only trigger on pull request closed events
 on:
   pull_request:
-    types: [ closed ]
+    types: [closed]
 env:
   PR_NUMBER: ${{ github.event.pull_request.number }}
-
 
 jobs:
   get_pr_stats:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: GitHub GraphQL Action
-      uses: helaili/github-graphql-action@2.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        query: queries/pr_stats.yaml
-        logLevel: debug
-        outputFile: pr_stats.json
-        pr_num: ${{ env.PR_NUMBER }}
-    - name: Set envs
-      run: |
-          echo "REPO_NAME=$(jq -r '.data.repository.name' pr_stats.json)" >> $GITHUB_ENV
-          echo "NUM_FILES=$(jq -r '.data.repository.pullRequest.changedFiles' pr_stats.json)" >> $GITHUB_ENV
-    - name: Render template
-      id: template
-      uses: chuhlomin/render-template@v1.2
-      with:
-        template: templates/prfaq-template.md
-        vars: |
-          foo: ${{ env.REPO_NAME }}
-          bar: ${{ env.NUM_FILES }}
-    - name: Create comment
-      uses: peter-evans/create-or-update-comment@v1
-      with:
-        issue-number: ${{ env.PR_NUMBER }}
-        body: ${{ steps.template.outputs.result }}     
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: GitHub GraphQL Action
+        uses: helaili/github-graphql-action@2.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          query: queries/pr_stats.yaml
+          logLevel: debug
+          outputFile: pr_stats.json
+          pr_num: ${{ env.PR_NUMBER }}
+
+      - name: Set env variables
+      - uses: jannekem/run-python-script-action@v1
+        with:
+          script: |
+            import json
+            import datetime
+
+            with open("pr_stats.json", "r") as pr_file:
+                pr_stats = json.load(pr_file)
+
+                # Get Time Open
+                created_at = pr_stats["data"]["repository"]["pullRequest"]["createdAt"]
+                merged_at = pr_stats["data"]["repository"]["pullRequest"]["mergedAt"]
+
+                created_at_timesamp = datetime.datetime.strptime(created_at, "%Y-%m-%dT%H:%M:%SZ")
+                merged_at_timestamp = datetime.datetime.strptime(merged_at, "%Y-%m-%dT%H:%M:%SZ")
+                timestamp_diff = merged_at_timestamp - created_at_timesamp
+
+                days, seconds = timestamp_diff.days, timestamp_diff.seconds
+                hours = days * 24 + seconds // 3600
+                minutes = (seconds % 3600) // 60
+                seconds = seconds % 60
+
+                timestamp_open = f"Timestamp open for ... {days} days, {hours} hours, {minutes} minutes, {seconds} seconds"
+                print(timestamp_open)
+                set_env("PR_OPEN", timestamp_open)
+
+                # Get participants
+                participants = pr_stats["data"]["repository"]["pullRequest"]["participants"][
+                    "edges"
+                ]
+                participants_string = ""
+                for participant in participants:
+                    participants_string += participant["node"]["login"] + "\n"
+
+                print(participants_string)
+                set_env("PR_USERS", participants_string)
+
+                # Lines of code changed
+                additions = pr_stats["data"]["repository"]["pullRequest"]["additions"]
+                deletions = pr_stats["data"]["repository"]["pullRequest"]["deletions"]
+                content_changed = f"+{additions} -{deletions} lines of code"
+                print(content_changed)
+                set_env("PR_LOC", content_changed)
+
+                # Files that changed
+                files = pr_stats["data"]["repository"]["pullRequest"]["files"]["edges"]
+                files_string = ""
+                for file_path in files:
+                    files_string += file_path["node"]["path"] + "\n"
+                print(files_string)
+                set_env("PR_FILES", files_string)
+      - name: Render template
+        id: template
+        uses: chuhlomin/render-template@v1.2
+        with:
+          template: templates/prfaq-template.md
+          vars: |
+            pr_open: ${{ env.PR_OPEN }}
+            pr_users: ${{ env.PR_USERS }}
+            pr_loc: ${{ env.PR_LOC }}
+            pr_files: ${{ env.PR_FILES }}
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ env.PR_NUMBER }}
+          body: ${{ steps.template.outputs.result }}
