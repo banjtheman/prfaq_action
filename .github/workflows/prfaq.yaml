@@ -22,7 +22,6 @@ jobs:
           logLevel: debug
           outputFile: pr_stats.json
           pr_num: ${{ env.PR_NUMBER }}
-
       - name: Set env variables
       - uses: jannekem/run-python-script-action@v1
         with:
