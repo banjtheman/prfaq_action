@@ -23,4 +23,16 @@ jobs:
         logLevel: debug
         outputFile: pr_stats.json
         pr_num: ${{ env.PR_NUMBER }}
-        
+    - name: Render template
+      id: template
+      uses: chuhlomin/render-template@v1.2
+      with:
+        template: templates/prfaq-template.md
+        vars: |
+          foo: this
+          bar: that
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ env.PR_NUMBER }}
+          body: ${{ steps.template.outputs.result }}     
