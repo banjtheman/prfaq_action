@@ -23,13 +23,11 @@ jobs:
         logLevel: debug
         outputFile: pr_stats.json
         pr_num: ${{ env.PR_NUMBER }}
-    - name: Set envS
-      run: echo "REPO_NAME=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV      
+    - name: Set envs
     - run: |
-        echo "REPO_NAME=$(jq -r '.data.repository.name' pr_stats.json)" >> $GITHUB_ENV   
-        echo "NUM_FILES=$(jq -r '.data.repository.pullRequest.changedFiles' pr_stats.json)" >> $GITHUB_ENV   
-
-      - name: Render template
+        echo "REPO_NAME=$(jq -r '.data.repository.name' pr_stats.json)" >> $GITHUB_ENV
+        echo "NUM_FILES=$(jq -r '.data.repository.pullRequest.changedFiles' pr_stats.json)" >> $GITHUB_ENV
+    - name: Render template
       id: template
       uses: chuhlomin/render-template@v1.2
       with:
