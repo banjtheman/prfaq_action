@@ -29,8 +29,8 @@ jobs:
       with:
         template: templates/prfaq-template.md
         vars: |
-          foo: {{ echo `jq -r ".data.repository.name" example.json` }}
-          bar: {{ echo `jq -r ".data.repository.name" example.json` }}
+          foo: ${{ echo `jq -r ".data.repository.name" pr_stats.json` }}
+          bar: ${{ echo `jq -r ".data.repository.name" pr_stats.json` }}
     - name: Create comment
       uses: peter-evans/create-or-update-comment@v1
       with:
