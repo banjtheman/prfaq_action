@@ -44,3 +44,4 @@ variables:
   pr_num:
     type: arg
     name: pr_num
+    cast: Int
