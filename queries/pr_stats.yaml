@@ -42,6 +42,7 @@ variables:
     file: ../workflow/event.json
     query: '.repository.name'
   pr_num:
-    type: arg
-    name: pr_num
+    type: jq
+    file: ../workflow/event.json
+    query: '.number'
     cast: Int
