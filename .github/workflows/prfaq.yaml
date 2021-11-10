@@ -45,7 +45,7 @@ jobs:
                 minutes = (seconds % 3600) // 60
                 seconds = seconds % 60
 
-                timestamp_open = f"Timestamp open for ... {days} days, {hours} hours, {minutes} minutes, {seconds} seconds"
+                timestamp_open = f" {days} days, {hours} hours, {minutes} minutes, {seconds} seconds"
                 print(timestamp_open)
                 set_env("PR_OPEN", timestamp_open)
 
@@ -55,7 +55,7 @@ jobs:
                 ]
                 participants_string = ""
                 for participant in participants:
-                    participants_string += participant["node"]["login"] + "\n"
+                    participants_string += participant["node"]["login"] + "  "
 
                 print(participants_string)
                 set_env("PR_USERS", participants_string)
@@ -71,7 +71,7 @@ jobs:
                 files = pr_stats["data"]["repository"]["pullRequest"]["files"]["edges"]
                 files_string = ""
                 for file_path in files:
-                    files_string += file_path["node"]["path"] + "\n"
+                    files_string += file_path["node"]["path"] + "  "
                 print(files_string)
                 set_env("PR_FILES", files_string)
       - name: Render template
