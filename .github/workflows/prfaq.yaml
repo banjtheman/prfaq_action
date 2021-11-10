@@ -24,9 +24,9 @@ jobs:
         outputFile: pr_stats.json
         pr_num: ${{ env.PR_NUMBER }}
     - name: Set envs
-    - run: |
-        echo "REPO_NAME=$(jq -r '.data.repository.name' pr_stats.json)" >> $GITHUB_ENV
-        echo "NUM_FILES=$(jq -r '.data.repository.pullRequest.changedFiles' pr_stats.json)" >> $GITHUB_ENV
+      run: |
+          echo "REPO_NAME=$(jq -r '.data.repository.name' pr_stats.json)" >> $GITHUB_ENV
+          echo "NUM_FILES=$(jq -r '.data.repository.pullRequest.changedFiles' pr_stats.json)" >> $GITHUB_ENV
     - name: Render template
       id: template
       uses: chuhlomin/render-template@v1.2
