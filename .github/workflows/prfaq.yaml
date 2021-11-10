@@ -15,13 +15,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
     - name: GitHub GraphQL Action
+      # uses: helaili/github-graphql-action@2.0.1
       run: |
           echo "$(cat ../workflow/event.json)"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        query: queries/pr_stats.yaml
-        logLevel: debug
-        outputFile: pr_stats.json
-        pr_num: ${{ env.PR_NUMBER }}
+      # with:
+      #   query: queries/pr_stats.yaml
+      #   logLevel: debug
+      #   outputFile: pr_stats.json
+      #   pr_num: ${{ env.PR_NUMBER }}
         
