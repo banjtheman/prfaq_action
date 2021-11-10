@@ -12,23 +12,15 @@ jobs:
   get_pr_stats:
     runs-on: ubuntu-latest
     steps:
-    - name: view the PR number
-      run: |
-          echo "PR number = ${{ github.event.pull_request.number }}"
-          echo "PR number = ${{ env.PR_NUMBER }}"
     - name: Checkout repository
       uses: actions/checkout@v2
     - name: GitHub GraphQL Action
       uses: helaili/github-graphql-action@2.0.1
-      run: |
-          echo "PR number = ${{ github.event.pull_request.number }}"
-          echo "PR number = ${{ env.PR_NUMBER }}"
-          cat ../workflow/event.json
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         query: queries/pr_stats.yaml
         logLevel: debug
         outputFile: pr_stats.json
-        pr_num: ${{ env.PR_NUMBER }}"
+        pr_num: ${{ env.PR_NUMBER }}
         
