@@ -43,4 +43,4 @@ variables:
     query: '.repository.name'
   pr_num:
     type: arg
-    name: PR_NUMBER
+    name: PR_NUM
